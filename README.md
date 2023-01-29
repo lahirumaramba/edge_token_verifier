@@ -11,10 +11,11 @@ We are currently testing the module on different edge runtimes. The current
 releases are only for testing purposes.
 
 ```js
-import { AppCheckTokenVerifier } from "https://deno.land/x/edge_token_verifier@v0.2.0/mod.ts";
+import { AppCheckTokenVerifier } from 'https://deno.land/x/edge_token_verifier@v0.2.0/mod.ts';
 ```
 
 ## Node.js
+
 ```js
 import { AppCheckTokenVerifier } from '@lahirumaramba/edge-token-verifier';
 ```
@@ -22,17 +23,18 @@ import { AppCheckTokenVerifier } from '@lahirumaramba/edge-token-verifier';
 # Examples on the Edge
 
 ## Netlify Edge Functions
+
 ```js
 // examples/netlify-edge/netlify/edge-functions/hello.ts
-import { AppCheckTokenVerifier } from "https://deno.land/x/edge_token_verifier@v0.2.0/mod.ts";
+import { AppCheckTokenVerifier } from 'https://deno.land/x/edge_token_verifier@v0.2.0/mod.ts';
 
 export default async (request: Request) => {
-  const appCheckToken = request.headers.get("X-Firebase-AppCheck");
+  const appCheckToken = request.headers.get('X-Firebase-AppCheck');
   const appCheckClaims = await verifyAppCheckToken(appCheckToken);
 
   if (!appCheckClaims) {
     return Response.json(
-      { message: "Unauthorized access. Invalid App Check token." },
+      { message: 'Unauthorized access. Invalid App Check token.' },
       { status: 401, headers: { "content-type": "application/json" } },
     );
   }
@@ -45,16 +47,17 @@ const verifyAppCheckToken = async (appCheckToken: string | null) => {
     return null;
   }
   try {
-    return await tokenVerifier.verify(appCheckToken, "project-id");
+    return await tokenVerifier.verify(appCheckToken, 'project-id');
   } catch (_err) {
     return null;
   }
 };
 
-export const config = { path: "/api" };
+export const config = { path: '/api' };
 ```
 
 ## Vercel Edge Functions (Next.js Middleware)
+
 ```js
 // examples/edge-token-vc/middleware.ts
 import { NextResponse } from 'next/server';
