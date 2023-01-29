@@ -21,7 +21,7 @@ export async function middleware(request: NextRequest) {
   if (!appCheckClaims) {
     return NextResponse.json(
       { message: 'Unauthorized access. Invalid App Check token.' },
-      { status: 401, headers: { 'content-type': 'application/json' } }
+      { status: 401, headers: { 'content-type': 'application/json' } },
     );
   }
   return NextResponse.next();
