@@ -4,13 +4,13 @@ import type { NextRequest } from 'next/server';
 import { AppCheckTokenVerifier } from '@lahirumaramba/edge-token-verifier';
 
 export async function middleware(request: NextRequest) {
-  const verifyAppCheckToken = async (appCheckToken: string) => {
+  const verifyAppCheckToken = async (appCheckToken: string | null) => {
     if (!appCheckToken) {
       return null;
     }
     const tokenVerifier = new AppCheckTokenVerifier();
     try {
-      return await tokenVerifier.verify(appCheckToken, 'admin-sdk-8b7ba');
+      return await tokenVerifier.verify(appCheckToken, 'project-id');
     } catch (_err) {
       return null;
     }
