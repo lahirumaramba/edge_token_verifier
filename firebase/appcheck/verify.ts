@@ -30,13 +30,8 @@ export class AppCheckTokenVerifier {
 
   async verify(
     token: string,
-    projectId?: string,
+    projectId: string,
   ): Promise<DecodedAppCheckToken> {
-    projectId = projectId ??
-      (Deno.env.get('GOOGLE_CLOUD_PROJECT') ||
-        Deno.env.get('GCLOUD_PROJECT') ||
-        '');
-
     const { header, payload } = await jwt.decodeJwt(token);
 
     this.verifyContent({ header, payload }, projectId);
