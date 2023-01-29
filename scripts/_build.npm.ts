@@ -19,7 +19,7 @@ await build({
   typeCheck: false,
   package: {
     // package.json properties
-    name: 'edge-token-verifier',
+    name: '@lahirumaramba/edge-token-verifier',
     version: Deno.args[0]?.replace(/^v/, ''),
     description: 'Token Verifier for the Edge',
     license: 'Apache-2.0',
