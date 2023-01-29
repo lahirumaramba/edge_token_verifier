@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import * as jwt from "../utils/jwt.ts";
+import * as jwt from '../utils/jwt.ts';
 
-const APP_CHECK_ISSUER = "https://firebaseappcheck.googleapis.com/";
-const JWKS_URL = "https://firebaseappcheck.googleapis.com/v1/jwks";
+const APP_CHECK_ISSUER = 'https://firebaseappcheck.googleapis.com/';
+const JWKS_URL = 'https://firebaseappcheck.googleapis.com/v1/jwks';
 
 export class AppCheckTokenVerifier {
   private signatureVerifier: jwt.SignatureVerifier;
@@ -33,9 +33,9 @@ export class AppCheckTokenVerifier {
     projectId?: string,
   ): Promise<DecodedAppCheckToken> {
     projectId = projectId ??
-      (Deno.env.get("GOOGLE_CLOUD_PROJECT") ||
-        Deno.env.get("GCLOUD_PROJECT") ||
-        "");
+      (Deno.env.get('GOOGLE_CLOUD_PROJECT') ||
+        Deno.env.get('GCLOUD_PROJECT') ||
+        '');
 
     const { header, payload } = await jwt.decodeJwt(token);
 
@@ -54,14 +54,14 @@ export class AppCheckTokenVerifier {
     const { header, payload } = fullDecodedToken;
 
     const projectIdMatchMessage =
-      " Make sure the App Check token comes from the same " +
-      "Firebase project as the service account used to authenticate this SDK.";
+      ' Make sure the App Check token comes from the same ' +
+      'Firebase project as the service account used to authenticate this SDK.';
     const scopedProjectId = `projects/${projectId}`;
 
     let errorMessage: string | undefined;
     if (header.alg !== jwt.ALGORITHM_RS256) {
       errorMessage =
-        "The provided App Check token has incorrect algorithm. Expected " +
+        'The provided App Check token has incorrect algorithm. Expected ' +
         `"${jwt.ALGORITHM_RS256}" but got "${header.alg}".`;
     } else if (
       !isNonEmptyArray(payload.aud) ||
@@ -75,15 +75,15 @@ export class AppCheckTokenVerifier {
         '".' +
         projectIdMatchMessage;
     } else if (
-      typeof payload.iss !== "string" ||
+      typeof payload.iss !== 'string' ||
       !payload.iss.startsWith(APP_CHECK_ISSUER)
     ) {
       errorMessage =
         'The provided App Check token has incorrect "iss" (issuer) claim.';
-    } else if (typeof payload.sub !== "string") {
+    } else if (typeof payload.sub !== 'string') {
       errorMessage =
         'The provided App Check token has no "sub" (subject) claim.';
-    } else if (payload.sub === "") {
+    } else if (payload.sub === '') {
       errorMessage =
         'The provided App Check token has an empty string "sub" (subject) claim.';
     }

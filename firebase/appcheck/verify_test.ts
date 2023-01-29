@@ -14,32 +14,32 @@
  * limitations under the License.
  */
 
-import * as jose from "https://deno.land/x/jose@v4.11.2/index.ts";
+import * as jose from 'https://deno.land/x/jose@v4.11.2/index.ts';
 import {
   assertEquals,
   assertRejects,
-} from "https://deno.land/std@0.175.0/testing/asserts.ts";
-import { denock } from "https://deno.land/x/denock@0.2.0/mod.ts";
+} from 'https://deno.land/std@0.175.0/testing/asserts.ts';
+import { denock } from 'https://deno.land/x/denock@0.2.0/mod.ts';
 
-import { AppCheckTokenVerifier } from "./verify.ts";
+import { AppCheckTokenVerifier } from './verify.ts';
 
 // Randomly generated JSON Web Key Sets that do not correspond to anything related to Firebase.
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-import jwksResponse from "../utils/mock.jwks.json" assert { type: "json" };
+import jwksResponse from '../utils/mock.jwks.json' assert { type: 'json' };
 
 // Randomly generated key pairs that don't correspond to anything related to Firebase or GCP
 // The private key for this key pair is identical to the one used in ./mock.jwks.json
-import jwksPrivateKey from "../utils/mock.private.json" assert { type: "json" };
+import jwksPrivateKey from '../utils/mock.private.json' assert { type: 'json' };
 
-const ALGORITHM = "RS256" as const;
-const ONE_HOUR_IN_STRING = "1h";
+const ALGORITHM = 'RS256' as const;
+const ONE_HOUR_IN_STRING = '1h';
 
-export const projectId = "project_id";
-export const projectNumber = "12345678";
-export const appId = "12345678:app:ID";
+export const projectId = 'project_id';
+export const projectNumber = '12345678';
+export const appId = '12345678:app:ID';
 export const developerClaims = {
-  one: "uno",
-  two: "dos",
+  one: 'uno',
+  two: 'dos',
 };
 
 /**
@@ -62,22 +62,22 @@ export async function generateAppCheckToken(opts?: {
       kid: jwksResponse.keys[0].kid,
     })
     .setAudience(
-      opts?.aud ?? ["projects/" + projectNumber, "projects/" + projectId],
+      opts?.aud ?? ['projects/' + projectNumber, 'projects/' + projectId],
     )
     .setExpirationTime(opts?.exp ?? ONE_HOUR_IN_STRING)
     .setIssuer(
-      opts?.iss ?? "https://firebaseappcheck.googleapis.com/" + projectNumber,
+      opts?.iss ?? 'https://firebaseappcheck.googleapis.com/' + projectNumber,
     )
     .setSubject(opts?.sub ?? appId)
     .sign(privateKey);
 }
 
-Deno.test("should verify a valid app check token", async () => {
+Deno.test('should verify a valid app check token', async () => {
   const interceptor = denock({
-    method: "GET",
-    protocol: "https",
-    host: "firebaseappcheck.googleapis.com",
-    path: "/v1/jwks",
+    method: 'GET',
+    protocol: 'https',
+    host: 'firebaseappcheck.googleapis.com',
+    path: '/v1/jwks',
     replyStatus: 200,
     responseBody: jwksResponse,
   });
@@ -87,14 +87,14 @@ Deno.test("should verify a valid app check token", async () => {
   const decoded = await verifier.verify(mockAppCheckToken, projectId);
   assertEquals(
     decoded.iss,
-    "https://firebaseappcheck.googleapis.com/" + projectNumber,
+    'https://firebaseappcheck.googleapis.com/' + projectNumber,
   );
 
   interceptor.destroy();
 });
 
-Deno.test("should throw for invalid algorithm", async () => {
-  const mockAppCheckToken = await generateAppCheckToken({ alg: "RS384" });
+Deno.test('should throw for invalid algorithm', async () => {
+  const mockAppCheckToken = await generateAppCheckToken({ alg: 'RS384' });
   const verifier = new AppCheckTokenVerifier();
 
   await assertRejects(
@@ -106,9 +106,9 @@ Deno.test("should throw for invalid algorithm", async () => {
   );
 });
 
-Deno.test("should throw for invalid issuer", async () => {
+Deno.test('should throw for invalid issuer', async () => {
   const mockAppCheckToken = await generateAppCheckToken({
-    iss: "incorrectIssuer",
+    iss: 'incorrectIssuer',
   });
   const verifier = new AppCheckTokenVerifier();
 
@@ -121,9 +121,9 @@ Deno.test("should throw for invalid issuer", async () => {
   );
 });
 
-Deno.test("should throw for invalid audience", async () => {
+Deno.test('should throw for invalid audience', async () => {
   const mockAppCheckToken = await generateAppCheckToken({
-    aud: "incorrectAudience",
+    aud: 'incorrectAudience',
   });
   const verifier = new AppCheckTokenVerifier();
 

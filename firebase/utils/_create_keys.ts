@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import * as jose from "https://deno.land/x/jose@v4.11.2/index.ts";
+import * as jose from 'https://deno.land/x/jose@v4.11.2/index.ts';
 
-const ALGORITHM = "RS256" as const;
+const ALGORITHM = 'RS256' as const;
 
 async function writeFile(path: string, text: string): Promise<void> {
   return await Deno.writeTextFile(path, text);
@@ -27,12 +27,12 @@ const { publicKey, privateKey } = await jose.generateKeyPair(ALGORITHM, {
 });
 const pkcs8Pem = await jose.exportPKCS8(privateKey);
 //console.log(pkcs8Pem);
-writeFile("./private.txt", pkcs8Pem);
+writeFile('./private.txt', pkcs8Pem);
 
 const spkiPem = await jose.exportSPKI(publicKey);
 //console.log(spkiPem);
-writeFile("./public.txt", spkiPem);
+writeFile('./public.txt', spkiPem);
 
 const publicJwk = await jose.exportJWK(publicKey);
 //console.log(publicJwk);
-writeFile("./public-jwk.json", JSON.stringify(publicJwk, null, 2));
+writeFile('./public-jwk.json', JSON.stringify(publicJwk, null, 2));

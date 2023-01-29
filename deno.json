@@ -3,5 +3,10 @@
     "test": "deno test --coverage=cov/",
     "gencov": "deno test --coverage=cov/",
     "coverage": "deno coverage --lcov cov/ > cov.lcov"
+  },
+  "fmt": {
+    "options": {
+      "singleQuote": true
+    }
   }
 }

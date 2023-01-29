@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import * as jose from "https://deno.land/x/jose@v4.11.2/index.ts";
-import { GetKeyFunction } from "https://deno.land/x/jose@v4.11.2/types.d.ts";
+import * as jose from 'https://deno.land/x/jose@v4.11.2/index.ts';
+import { GetKeyFunction } from 'https://deno.land/x/jose@v4.11.2/types.d.ts';
 
 const HOUR_IN_SECONDS = 3600;
-export const ALGORITHM_RS256 = "RS256" as const;
+export const ALGORITHM_RS256 = 'RS256' as const;
 
 export type Dictionary = { [key: string]: unknown };
 
@@ -63,13 +63,13 @@ export class CertKeyFetcher implements KeyFetcher {
 
     // reset expire at from previous set of keys.
     this.publicKeysExpireAt = 0;
-    if (jsonResponse.headers.has("cache-control")) {
+    if (jsonResponse.headers.has('cache-control')) {
       const cacheControlHeader: string =
-        jsonResponse.headers.get("cache-control") ?? "";
-      const parts = cacheControlHeader.split(",");
+        jsonResponse.headers.get('cache-control') ?? '';
+      const parts = cacheControlHeader.split(',');
       parts.forEach((part) => {
-        const subParts = part.trim().split("=");
-        if (subParts[0] === "max-age") {
+        const subParts = part.trim().split('=');
+        if (subParts[0] === 'max-age') {
           const maxAge: number = +subParts[1];
           this.publicKeysExpireAt = Date.now() + maxAge * 1000;
         }
@@ -132,7 +132,7 @@ export class PublicKeySignatureVerifier implements SignatureVerifier {
     keyFetcher: KeyFetcher,
   ): Promise<void> {
     const header = jose.decodeProtectedHeader(token);
-    const kid = header.kid ?? "";
+    const kid = header.kid ?? '';
     const publicKeys = await keyFetcher.fetchPublicKeys();
     const publicKey = await jose.importSPKI(publicKeys[kid], ALGORITHM_RS256);
     await jose.jwtVerify(token, publicKey);
