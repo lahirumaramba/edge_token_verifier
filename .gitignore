@@ -2,3 +2,6 @@
 cov.lcov
 cov/
 npm/
+
+# Local Netlify folder
+.netlify
