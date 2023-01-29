@@ -1,0 +1,12 @@
+{
+  "tasks": {
+    "test": "deno test",
+    "gencov": "deno test --coverage=cov/",
+    "coverage": "deno coverage --lcov cov/ > cov.lcov"
+  },
+  "fmt": {
+    "options": {
+      "singleQuote": true
+    }
+  }
+}

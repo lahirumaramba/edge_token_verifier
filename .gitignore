@@ -1,0 +1,4 @@
+!.vscode
+cov.lcov
+cov/
+npm/
