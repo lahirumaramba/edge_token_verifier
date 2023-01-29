@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "test": "deno test --coverage=cov/",
+    "test": "deno test",
     "gencov": "deno test --coverage=cov/",
     "coverage": "deno coverage --lcov cov/ > cov.lcov"
   },
